@@ -52,5 +52,21 @@ namespace Alura.ByteBank.WebApp.Testes
             driver.Close();
         }
 
+        [Fact]
+        public void ValidaLinkDeLoginNaHome()
+        {
+
+            IWebDriver driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            driver.Navigate().GoToUrl("https://localhost:44309/");
+
+            // FindElement(By. element type ("the element name") identifies an html element on the page.
+            var linkLogin = driver.FindElement(By.LinkText("Login"));
+
+            linkLogin.Click();
+
+            Assert.Contains("img", driver.PageSource);
+
+        }
+
     }
 }
