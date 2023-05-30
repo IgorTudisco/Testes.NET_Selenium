@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using Alura.ByteBank.WebApp.Testes.PageObjects;
+using Alura.ByteBank.WebApp.Testes.Utilities;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
@@ -11,37 +13,45 @@ using Xunit.Abstractions;
 
 namespace Alura.ByteBank.WebApp.Testes
 {
-    public class NavegandoNaPaginaHome
+    public class NavegandoNaPaginaHome : IClassFixture<Manager>
     {
         private IWebDriver driver;
         public ITestOutputHelper SaidaConsoleTeste;
 
-        public NavegandoNaPaginaHome(ITestOutputHelper _saidaConsoleTeste)
+        public NavegandoNaPaginaHome(Manager _manager, ITestOutputHelper _saidaConsoleTeste)
         {
             // Arrange
-            driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            driver = _manager.Driver;
             SaidaConsoleTeste = _saidaConsoleTeste;
         }
 
         [Fact]
         public void CarregarPaginaHomeEVerificarTituloDaPagina()
         {
-            // Act
-            driver.Navigate().GoToUrl("https://localhost:44309/");
+            // Arrange
+            var loginPO = new LoginPO(driver);
+
+            // Act        
+            loginPO.Navegar("https://localhost:44309/");
+
             // Assert
             Assert.Contains("WebApp", driver.Title);
-            driver.Close();
+            
         }
 
         [Fact]
         public void CarregadaPaginaHomeVerificaExistenciaLinkLoginEHome()
         {
-            // Act
-            driver.Navigate().GoToUrl("https://localhost:44309/");
+            // Arrange
+            var loginPO = new LoginPO(driver);
+
+            // Act        
+            loginPO.Navegar("https://localhost:44309/");
+
             // Assert
             Assert.Contains("Login", driver.PageSource);
             Assert.Contains("Home", driver.PageSource);
-            driver.Close();
+            
         }
 
         // Method created by Selenium
@@ -57,7 +67,7 @@ namespace Alura.ByteBank.WebApp.Testes
             driver.FindElement(By.Id("Senha")).SendKeys("senha01");
             driver.FindElement(By.Id("btn-logar")).Click();
             driver.FindElement(By.CssSelector(".btn")).Click();
-            driver.Close();
+            
         }
 
         [Fact]
@@ -71,7 +81,7 @@ namespace Alura.ByteBank.WebApp.Testes
             linkLogin.Click();
 
             Assert.Contains("img", driver.PageSource);
-            driver.Close();
+            
         }
 
     }
